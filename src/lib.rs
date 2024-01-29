@@ -1,5 +1,5 @@
 //! The txtar crate implements a trivial text-based file archive format.
-//! This has been ported from the go package of the same name.
+//! This has been ported from the [go package of the same name](https://pkg.go.dev/golang.org/x/tools/txtar).
 //!
 //! The goals for the format are:
 //!
@@ -36,11 +36,11 @@
 //! -- file2  --
 //! This is the conten of file 2
 //! ```
-//! # Reading Examples
+//! # Examples
 //!
 //! You can use `Archive::from` to convert a string to an archive
 //! ```
-//! use txtar::Archive;
+//! use rs_txtar::Archive;
 //!
 //! let tx_str = "comment1
 //! comment2
@@ -51,7 +51,16 @@
 //! ";
 //!
 //! let archive = Archive::from(tx_str);
+//!
 //! assert_eq!(archive.comment, "comment1\ncomment2\n");
+//!
+//! assert!(archive.contains("file1"));
+//! assert_eq!(archive["file2"].name.as_str(), "file2");
+//! assert_eq!(archive["file2"].content.as_str(), "this is file2\n");
+//! assert!(archive.get("file2").is_some());
+//!
+//! assert!(!archive.contains("not-exists"));
+//! assert!(archive.get("not-exists").is_none());
 //!```
 
 #[non_exhaustive]
@@ -106,7 +115,7 @@ impl Default for Archive {
 
 /// Convert a [&str] into an archive
 impl From<&str> for Archive {
-    /// parses [value] into a archive.
+    /// parses `value` into a archive.
     fn from(value: &str) -> Self {
         let (comment, mut file_name, mut after) = find_next_marker(value);
         let mut files = Vec::new();
@@ -153,7 +162,8 @@ pub struct File {
 }
 
 impl File {
-    fn new(name: &str, content: &str) -> File {
+    /// Create a new file
+    pub fn new(name: &str, content: &str) -> File {
         File {
             name: name.to_owned(),
             content: content.to_owned(),
