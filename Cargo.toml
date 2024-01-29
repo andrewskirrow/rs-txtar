@@ -1,5 +1,7 @@
 [package]
 name = "rs-txtar"
+description = "Rust implementation of the txtar format"
+license = "MIT"
 version = "0.1.0"
 edition = "2021"
 
