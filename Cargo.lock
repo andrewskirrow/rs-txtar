@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "txtar"
+name = "rs-txtar"
 version = "0.1.0"
